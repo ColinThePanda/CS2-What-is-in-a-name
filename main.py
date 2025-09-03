@@ -1,8 +1,54 @@
 import keyboard
 import os
-import time
+from typing import Dict, Callable
 
-def menu():
+def reverse(name : str) -> str:
+    pass
+
+def num_vowels(name : str) -> int:
+    pass
+
+def consonant_frequency(name : str):
+    pass
+
+def first_name(name : str) -> str:
+    pass
+
+def last_name(name : str) -> str:
+    pass
+
+def middle_names(name : str) -> str | list[str]:
+    pass
+
+def contains_hyphen(name : str) -> bool:
+    pass
+
+def lowercase(name : str) -> str:
+    pass
+
+def uppercase(name : str) -> str:
+    pass
+
+def num_vowels(name : str) -> int:
+    pass
+
+def mix_up_letters(name : str) -> str:
+    pass
+
+def is_palindrome(name : str) -> bool:
+    pass
+
+def sorted(name : str) -> str:
+    pass
+
+def initials(name : str) -> str:
+    pass
+
+def contains_title(name : str) -> bool:
+    pass
+
+
+def menu() -> int:
     selections = ["1. Reverse",
      "2. Num of Vowels",
      "3. Consonant Frequency",
@@ -46,9 +92,33 @@ def menu():
 
 
 def main():
-    selection = menu()
+    selection : int = menu()
     os.system('cls' if os.name == 'nt' else 'clear')
-    print(selection)
+    name : str = input("What is your name?")
+    
+    function_key : Dict[Callable] = {
+        1 : reverse,
+        2 : num_vowels,
+        3 : consonant_frequency,
+        4 : first_name,
+        5 : last_name,
+        6 : middle_names,
+        7 : contains_hyphen,
+        8 : lowercase,
+        9 : uppercase,
+        10 : mix_up_letters,
+        11 : is_palindrome,
+        12 : sorted,
+        13 : initials,
+        14 : contains_title
+    }
+    
+    function = function_key.get(selection)
+    function_call = lambda name : function(name)
+    function_call(name)
+    
+    
+    
 
 if __name__ == "__main__":
     main()
