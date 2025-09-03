@@ -1,48 +1,57 @@
 import keyboard
 import os
 from typing import Dict, Callable
+from collections import Counter
 
-def reverse(name : str) -> str:
-    pass
+def reverse(name: str) -> str:
+    return ''.join(reversed(name))
 
 def num_vowels(name : str) -> int:
-    pass
+    counter = Counter(name.replace(" ", "").lower())
+    num_vowels = sum([counter.get(vowel, 0) for vowel in ['a', 'e', 'i', 'o', 'u']])
+    return num_vowels
 
 def consonant_frequency(name : str):
     pass
 
+def split_names(name : str) -> list[str]:
+    names = name.split(" ")
+    names = list(filter(lambda name : name != "" and name != None, names))
+    return names
+
 def first_name(name : str) -> str:
-    pass
+    return split_names(name)[0]
 
 def last_name(name : str) -> str:
-    pass
+    return split_names(name)[-1]
 
 def middle_names(name : str) -> str | list[str]:
-    pass
+    middle_names : list[str] = split_names(name)[1:-1]
+    middle_names = middle_names[0] if len(middle_names) == 1 else middle_names
+    return middle_names if len(middle_names) > 0 else None
 
 def contains_hyphen(name : str) -> bool:
-    pass
+    return "-" in name
 
 def lowercase(name : str) -> str:
-    pass
+    return name.lower()
 
 def uppercase(name : str) -> str:
-    pass
-
-def num_vowels(name : str) -> int:
-    pass
+    return name.upper()
 
 def mix_up_letters(name : str) -> str:
     pass
 
 def is_palindrome(name : str) -> bool:
-    pass
+    return name == reverse(name)
 
 def sorted(name : str) -> str:
-    pass
+    return str(sorted(name))
 
 def initials(name : str) -> str:
-    pass
+    names = split_names(name)
+    initials = [name[0] for name in names]
+    return "".join(initials)
 
 def contains_title(name : str) -> bool:
     pass
@@ -115,10 +124,8 @@ def main():
     
     function = function_key.get(selection)
     function_call = lambda name : function(name)
-    function_call(name)
-    
-    
-    
+    result = function_call(name)
+    print(result)
 
 if __name__ == "__main__":
     main()
