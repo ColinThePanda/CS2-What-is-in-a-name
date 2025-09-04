@@ -1,21 +1,23 @@
-import keyboard
+import msvcrt
 import os
 from typing import Dict, Callable
 from collections import Counter
+from string_util import list_to_str, remove_char, upper, lower, split_spaces
 
 def reverse(name: str) -> str:
-    return ''.join(reversed(name))
+    return list_to_str(reversed(name))
 
 def num_vowels(name : str) -> int:
-    counter = Counter(name.replace(" ", "").lower())
+    counter = Counter(lower(remove_char(name, " ")))
     num_vowels = sum([counter.get(vowel, 0) for vowel in ['a', 'e', 'i', 'o', 'u']])
     return num_vowels
 
 def consonant_frequency(name : str):
-    pass
+    vowels = num_vowels(name)
+    return vowels / len(name) / vowels
 
 def split_names(name : str) -> list[str]:
-    names = name.split(" ")
+    names = split_spaces(name)
     names = list(filter(lambda name : name != "" and name != None, names))
     return names
 
@@ -34,10 +36,10 @@ def contains_hyphen(name : str) -> bool:
     return "-" in name
 
 def lowercase(name : str) -> str:
-    return name.lower()
+    return lower(name)
 
 def uppercase(name : str) -> str:
-    return name.upper()
+    return upper(name)
 
 def mix_up_letters(name : str) -> str:
     pass
@@ -45,16 +47,17 @@ def mix_up_letters(name : str) -> str:
 def is_palindrome(name : str) -> bool:
     return name == reverse(name)
 
-def sorted(name : str) -> str:
-    return str(sorted(name))
+def sort_name(name : str) -> str:
+    return list_to_str(sorted(name))
 
 def initials(name : str) -> str:
     names = split_names(name)
     initials = [name[0] for name in names]
-    return "".join(initials)
+    return list_to_str(initials)
 
 def contains_title(name : str) -> bool:
-    pass
+    titles = ['dr', 'phd', 'sir', 'esq']
+    return any([title in lower(remove_char(remove_char(name, " "), ".")) for title in titles])
 
 
 def menu() -> int:
@@ -80,17 +83,23 @@ def menu() -> int:
         os.system('cls' if os.name == 'nt' else 'clear')
         for i, choice in enumerate(selections):
             print(f"\033[32m{choice}\033[0m" if selection == i+1 else choice)
-        key = keyboard.read_key()
+        
+        while not msvcrt.kbhit():
+            pass
+        
+        key_byte = msvcrt.getch()
 
-        match key:
-            case "up":
-                selection -= 1
-                while keyboard.is_pressed("up"): pass
-            case "down":
-                selection += 1
-                while keyboard.is_pressed("down"): pass
-            case "space":
-                break
+        if key_byte ==  b'\xe0': # arrow key
+            arrow_key = msvcrt.getch()
+            match arrow_key:
+                case b'H': # up
+                    selection -= 1
+                case b'P': # down
+                    selection += 1
+                case b' ':
+                    break
+        elif key_byte == b' ':
+            break
         
         if selection < 1:
             selection = len(selections)
@@ -117,7 +126,7 @@ def main():
         9 : uppercase,
         10 : mix_up_letters,
         11 : is_palindrome,
-        12 : sorted,
+        12 : sort_name,
         13 : initials,
         14 : contains_title
     }
