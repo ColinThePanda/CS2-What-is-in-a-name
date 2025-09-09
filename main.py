@@ -1,23 +1,20 @@
 import msvcrt
 import os
 from typing import Dict, Callable
-from collections import Counter
-from string_util import list_to_str, remove_char, upper, lower, split_spaces
-
+from string_util import join, remove_char, upper, lower, split_spaces, counter, mix_up_letters
 
 def reverse(name: str) -> str:
-    return list_to_str(reversed(name))
-
+    return join([name[i] for i in range(len(name)-1, -1, -1)])
 
 def num_vowels(name: str) -> int:
-    counter = Counter(lower(remove_char(name, " ")))
-    num_vowels = sum([counter.get(vowel, 0) for vowel in ["a", "e", "i", "o", "u"]])
+    count = counter(lower(remove_char(name, " ")))
+    num_vowels = sum([count.get(vowel, 0) for vowel in ["a", "e", "i", "o", "u"]])
     return num_vowels
 
 
 def consonant_frequency(name: str):
     vowels = num_vowels(name)
-    return vowels / len(name) / vowels
+    return (len(name) - vowels) / vowels
 
 
 def split_names(name: str) -> list[str]:
@@ -52,22 +49,26 @@ def uppercase(name: str) -> str:
     return upper(name)
 
 
-def mix_up_letters(name: str) -> str:
-    pass
+def mix_up_name(name: str) -> str:
+    names = split_names(name)
+    mixed_names = [mix_up_letters(str) for str in names]
+    print(names)
+    return join(mixed_names, " ")
 
 
 def is_palindrome(name: str) -> bool:
+    name = lower(remove_char(name, " "))
     return name == reverse(name)
 
 
 def sort_name(name: str) -> str:
-    return list_to_str(sorted(name))
+    return join(sorted(name))
 
 
 def initials(name: str) -> str:
     names = split_names(name)
     initials = [name[0] for name in names]
-    return list_to_str(initials)
+    return join(upper(initials))
 
 
 def contains_title(name: str) -> bool:
@@ -146,7 +147,7 @@ def main():
         7: contains_hyphen,
         8: lowercase,
         9: uppercase,
-        10: mix_up_letters,
+        10: mix_up_name,
         11: is_palindrome,
         12: sort_name,
         13: initials,
