@@ -12,7 +12,7 @@ def num_vowels(name: str) -> int:
     return num_vowels
 
 
-def consonant_frequency(name: str):
+def consonant_frequency(name: str) -> float:
     vowels = num_vowels(name)
     return (len(name) - vowels) / vowels
 
@@ -120,7 +120,7 @@ def menu() -> int:
                     case b"P":  # down
                         selection += 1
                         action_made = True
-            elif key_byte == b" " or key_byte == b"\r":
+            elif key_byte == b" " or key_byte == b"\r": # space or enter
                 action_made = True
                 running = False
 

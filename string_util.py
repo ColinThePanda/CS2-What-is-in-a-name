@@ -75,5 +75,3 @@ def mix_up_letters(text : str) -> str:
         out_str += text[index]
         text = text[0 : index] + text[index + 1 :]
     return out_str
-
-print(split_spaces("Colin Politi"))
