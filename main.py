@@ -1,7 +1,7 @@
 import msvcrt
 import os
 from typing import Dict, Callable
-from string_util import join, remove_char, upper, lower, split_spaces, counter, mix_up_letters
+from string_util import join, remove_char, upper, lower, split_spaces, counter, mix_up_letters, lowercase_letters
 
 def reverse(name: str) -> str:
     return join([name[i] for i in range(len(name)-1, -1, -1)])
@@ -14,7 +14,8 @@ def num_vowels(name: str) -> int:
 
 def consonant_frequency(name: str) -> float:
     vowels = num_vowels(name)
-    return (len(name) - vowels) / vowels
+    letters = join([char for char in lower(remove_char(name, " ")) if char in lowercase_letters])
+    return (len(letters) - vowels) / vowels
 
 
 def split_names(name: str) -> list[str]:
@@ -135,7 +136,7 @@ def menu() -> int:
 def main():
     selection: int = menu()
     os.system("cls" if os.name == "nt" else "clear")
-    name: str = input("What is your name?")
+    name: str = input("What is your name? ")
 
     function_key: Dict[Callable] = {
         1: reverse,
