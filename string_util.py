@@ -125,6 +125,15 @@ def counter(text : str) -> Dict[str, int]:
     return counts
 
 def mix_up_letters(text : str) -> str:
+    """
+    Shuffles characters in a string
+
+    Args:
+        text (str): string to shuffle
+
+    Returns:
+        str: shuffled string
+    """
     from random import randint
     out_str = ""
     while len(text) > 0:
