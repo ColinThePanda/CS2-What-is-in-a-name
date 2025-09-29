@@ -13,6 +13,60 @@ from string_util import (
     lowercase_letters,
 )
 
+titles = [
+    "mr",
+    "mrs",
+    "ms",
+    "miss",
+    "dr",
+    "prof",
+    "rev",
+    "fr",
+    "sir",
+    "madam",
+    "lord",
+    "lady",
+    "hon",
+    "judge",
+    "pres",
+    "gov",
+    "mayor",
+    "chancellor",
+    "principal",
+    "dean",
+    "phd",
+    "esq",
+    "prof",
+    "sr",
+    "jr",
+    "i",
+    "ii",
+    "iii",
+    "ix",
+    "v",
+    "vi",
+    "vii",
+    "viii",
+    "ix",
+    "x",
+    "xi",
+    "xii",
+    "xiii",
+    "xiv",
+    "xv",
+    "xvi",
+    "xvii",
+    "xviii",
+    "xix",
+    "xx",
+]
+
+
+def remove_titles(name: str) -> str:
+    names = split_names(name)
+    no_titles = list(filter(lambda char: char not in titles, names))
+    return join(no_titles, " ")
+
 
 def reverse(name: str) -> str:
     """
@@ -92,9 +146,7 @@ def first_name(name: str) -> str:
     Returns:
         str: first sub-string
     """
-    return (
-        split_names(name)[1] if contains_title(name) else split_names(name)[0]
-    )  # if title then do second part not first
+    return split_names(remove_titles(name))[0]
 
 
 def last_name(name: str) -> str:
@@ -120,12 +172,7 @@ def middle_names(name: str) -> str | list[str]:
     Returns:
         str | list[str]: str if only one middle sub-string, or list of string if multiple
     """
-    if contains_title(name):
-        middle_names: list[str] = split_names(name)[
-            2:-1
-        ]  # if title then starts at third part
-    else:
-        middle_names: list[str] = split_names(name)[1:-1]  # else starts at second
+    middle_names = split_names(remove_titles(name))[1:-1]
     if len(middle_names) == 1:
         return middle_names[0]
     elif len(middle_names) == 0:
@@ -227,11 +274,8 @@ def initials(name: str) -> str:
     Returns:
         str: first character in each sub-string of a string when seperated by spaces
     """
-    names = split_names(name)
+    names = split_names(remove_titles(name))
     initials = [name[0] for name in names]  # first letter of each part of name
-    initials = (
-        initials[1:] if contains_title(name) else initials
-    )  # if title then skip first one
     return upper(join(initials))
 
 
@@ -245,59 +289,12 @@ def contains_title(name: str) -> bool:
     Returns:
         bool: whether string contains title
     """
-    titles = [
-        "mr",
-        "mrs",
-        "ms",
-        "miss",
-        "dr",
-        "prof",
-        "rev",
-        "fr",
-        "sir",
-        "madam",
-        "lord",
-        "lady",
-        "hon",
-        "judge",
-        "pres",
-        "gov",
-        "mayor",
-        "chancellor",
-        "principal",
-        "dean",
-        "phd",
-        "esq",
-        "prof",
-        "sr",
-        "jr",
-        "i",
-        "ii",
-        "iii",
-        "ix",
-        "v",
-        "vi",
-        "vii",
-        "viii",
-        "ix",
-        "x",
-        "xi",
-        "xii",
-        "xiii",
-        "xiv",
-        "xv",
-        "xvi",
-        "xvii",
-        "xviii",
-        "xix",
-        "xx",
-    ]  # all titles to check
-    
+
     # Title before name
     pre_title = lower(
         remove_char(remove_char(split_names(name)[0], " "), ".")
     )  # gets first part of name lowercase without spaces or periods
-    
+
     post_title = lower(
         remove_char(remove_char(split_names(name)[-1], " "), ".")
     )  # gets last part of name lowercase without spaces or periods
