@@ -180,7 +180,7 @@ def counter(text: str) -> Dict[str, int]:
         text (str): string to count
 
     Returns:
-        counter (Dict[str, int]): counter dictionary, {every letter in text \: number of instances}
+        counter (Dict[str, int]): counter dictionary, {every letter in text : number of instances}
     """
     counts: Dict[str, int] = dict()
     for char in text:

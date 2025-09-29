@@ -24,7 +24,9 @@ def reverse(name: str) -> str:
     Returns:
         str: reversed string
     """
-    return join([name[i] for i in range(len(name) - 1, -1, -1)]) # starts at last char, stops at first char, goes back by one each time
+    return join(
+        [name[i] for i in range(len(name) - 1, -1, -1)]
+    )  # starts at last char, stops at first char, goes back by one each time
 
 
 def num_vowels(name: str) -> int:
@@ -37,8 +39,12 @@ def num_vowels(name: str) -> int:
     Returns:
         int: number of vowels
     """
-    counts: Dict[str, int] = counter(lower(remove_char(name, " "))) # number of each char in str
-    num_vowels = sum([counts.get(vowel, 0) for vowel in ["a", "e", "i", "o", "u"]]) # number of the chars that are vowels
+    counts: Dict[str, int] = counter(
+        lower(remove_char(name, " "))
+    )  # number of each char in str
+    num_vowels = sum(
+        [counts.get(vowel, 0) for vowel in ["a", "e", "i", "o", "u"]]
+    )  # number of the chars that are vowels
     return num_vowels
 
 
@@ -54,9 +60,11 @@ def consonant_frequency(name: str) -> float:
     """
     vowels = num_vowels(name)
     letters = join(
-        [char for char in lower(remove_char(name, " ")) if char in lowercase_letters] # gets total letters
+        [
+            char for char in lower(remove_char(name, " ")) if char in lowercase_letters
+        ]  # gets total letters
     )
-    return (len(letters) - vowels) / vowels # consonants / vowels
+    return (len(letters) - vowels) / len(letters)  # consonants / total_letters
 
 
 def split_names(name: str) -> list[str]:
@@ -84,7 +92,9 @@ def first_name(name: str) -> str:
     Returns:
         str: first sub-string
     """
-    return split_names(name)[1] if contains_title(name) else split_names(name)[0] # if title then do second part not first
+    return (
+        split_names(name)[1] if contains_title(name) else split_names(name)[0]
+    )  # if title then do second part not first
 
 
 def last_name(name: str) -> str:
@@ -111,11 +121,17 @@ def middle_names(name: str) -> str | list[str]:
         str | list[str]: str if only one middle sub-string, or list of string if multiple
     """
     if contains_title(name):
-        middle_names: list[str] = split_names(name)[2:-1] # if title then starts at third part
+        middle_names: list[str] = split_names(name)[
+            2:-1
+        ]  # if title then starts at third part
     else:
-        middle_names: list[str] = split_names(name)[1:-1] # else starts at second
-    middle_names = middle_names[0] if len(middle_names) == 1 else middle_names # if one middle name then str else list
-    return middle_names if len(middle_names) > 0 else ""
+        middle_names: list[str] = split_names(name)[1:-1]  # else starts at second
+    if len(middle_names) == 1:
+        return middle_names[0]
+    elif len(middle_names) == 0:
+        return ""
+    else:
+        return middle_names
 
 
 def contains_hyphen(name: str) -> bool:
@@ -196,7 +212,9 @@ def sort_name(name: str) -> str:
     Returns:
         str: sorted name
     """
-    return join(sorted(name))
+    return join(
+        sorted(join(list(filter(lambda x: lower(x) in lowercase_letters, name))))
+    )
 
 
 def initials(name: str) -> str:
@@ -210,9 +228,11 @@ def initials(name: str) -> str:
         str: first character in each sub-string of a string when seperated by spaces
     """
     names = split_names(name)
-    initials = [name[0] for name in names] # first letter of each part of name
-    initials = initials[1:] if contains_title(name) else initials # if title then skip first one
-    return join(upper(initials))
+    initials = [name[0] for name in names]  # first letter of each part of name
+    initials = (
+        initials[1:] if contains_title(name) else initials
+    )  # if title then skip first one
+    return upper(join(initials))
 
 
 def contains_title(name: str) -> bool:
@@ -225,12 +245,66 @@ def contains_title(name: str) -> bool:
     Returns:
         bool: whether string contains title
     """
-    titles = ["dr", "phd", "sir", "esq", "ms", "mrs"] # all titles to check
-    title = lower(remove_char(remove_char(split_names(name)[0], " "), ".")) # gets first part of name lowercase without spaces or periods
-    return title in titles
+    titles = [
+        "mr",
+        "mrs",
+        "ms",
+        "miss",
+        "dr",
+        "prof",
+        "rev",
+        "fr",
+        "sir",
+        "madam",
+        "lord",
+        "lady",
+        "hon",
+        "judge",
+        "pres",
+        "gov",
+        "mayor",
+        "chancellor",
+        "principal",
+        "dean",
+        "phd",
+        "esq",
+        "prof",
+        "sr",
+        "jr",
+        "i",
+        "ii",
+        "iii",
+        "ix",
+        "v",
+        "vi",
+        "vii",
+        "viii",
+        "ix",
+        "x",
+        "xi",
+        "xii",
+        "xiii",
+        "xiv",
+        "xv",
+        "xvi",
+        "xvii",
+        "xviii",
+        "xix",
+        "xx",
+    ]  # all titles to check
+    
+    # Title before name
+    pre_title = lower(
+        remove_char(remove_char(split_names(name)[0], " "), ".")
+    )  # gets first part of name lowercase without spaces or periods
+    
+    post_title = lower(
+        remove_char(remove_char(split_names(name)[-1], " "), ".")
+    )  # gets last part of name lowercase without spaces or periods
+    return pre_title in titles or post_title in titles
 
 
-def menu() -> int:
+def menu() -> tuple[int, str]:
     """
     Runs a loop, displaying every function as an option, and then returning the number of the option selected\n
     Options include:
@@ -252,22 +326,22 @@ def menu() -> int:
     Returns:
         int: selection
     """
-    
-    def ansi(ansi : str):
+
+    def ansi(ansi: str):
         """Helper function for using ansi escape codes"""
         sys.stdout.write(ansi)
         sys.stdout.flush()
-        
+
     selections = [
-        "1. Reverse",
-        "2. Num of Vowels",
-        "3. Consonant Frequency",
-        "4. First Name",
-        "5. Last Name",
-        "6. Middle Name(s)",
-        "7. Contains Hyphen",
-        "8. Lowercase",
-        "9. Uppercase",
+        "1.  Reverse",
+        "2.  Num of Vowels",
+        "3.  Consonant Frequency",
+        "4.  First Name",
+        "5.  Last Name",
+        "6.  Middle Name(s)",
+        "7.  Contains Hyphen",
+        "8.  Lowercase",
+        "9.  Uppercase",
         "10. Mix Up Letters",
         "11. Is Palindrome",
         "12. Sorted",
@@ -277,27 +351,29 @@ def menu() -> int:
 
     selection = 1
     running = True
-    
-    ansi("\033[?1049h") # goes to different screen
-    ansi("\033[?25l") # hides cursor
+
+    ansi("\033[?1049h")  # goes to different screen
+    ansi("\033[?25l")  # hides cursor
 
     while running:
-        os.system("cls" if os.name == "nt" else "clear") # clears screen (cross platform)
+        os.system(
+            "cls" if os.name == "nt" else "clear"
+        )  # clears screen (cross platform)
         for i, choice in enumerate(selections):
             if selection == i + 1:
-                print(f"\033[1;32m{choice}\033[0m") # bold and green if selected
+                print(f"\033[1;32m{choice}\033[0m")  # bold and green if selected
             else:
                 print(choice)
 
         action_made = False
         while not action_made:
-            while not msvcrt.kbhit(): # wait until pressing key
+            while not msvcrt.kbhit():  # wait until pressing key
                 pass
 
-            key_byte = msvcrt.getch() # get what key it is
+            key_byte = msvcrt.getch()  # get what key it is
 
             if key_byte == b"\xe0":  # arrow key
-                arrow_key = msvcrt.getch() # get which arrow key it is
+                arrow_key = msvcrt.getch()  # get which arrow key it is
                 match arrow_key:
                     case b"H":  # up
                         selection -= 1
@@ -310,24 +386,24 @@ def menu() -> int:
                 running = False
 
         if selection < 1:
-            selection = len(selections) # loop if press up on first selection
+            selection = len(selections)  # loop if press up on first selection
         if selection > len(selections):
-            selection = 1 # loop if press down on last selection
+            selection = 1  # loop if press down on last selection
 
-    ansi("\033[?25h") # show cursor
-    
-    os.system("cls" if os.name == "nt" else "clear") # clear screen (cross platform)
+    ansi("\033[?25h")  # show cursor
+
+    os.system("cls" if os.name == "nt" else "clear")  # clear screen (cross platform)
     name: str = input("What is your name? ")
-    
-    ansi("\033[?1049l") # go back to original screen
-    
+
+    ansi("\033[?1049l")  # go back to original screen
+
     return selection, name
 
 
 def main():
     selection, name = menu()
 
-    function_key: Dict[Callable] = {
+    function_key: Dict[int, Callable] = {
         1: reverse,
         2: num_vowels,
         3: consonant_frequency,
@@ -344,10 +420,11 @@ def main():
         14: contains_title,
     }
 
-    function = function_key.get(selection) # get function corresponding to selection
-    function_call = lambda name: function(name)
-    result = function_call(name) # call function
-    print(result)
+    function = function_key.get(selection)  # get function corresponding to selection
+    if function:
+        function_call = lambda name: function(name)
+        result = function_call(name)  # call function
+        print(result)
 
 
 if __name__ == "__main__":
