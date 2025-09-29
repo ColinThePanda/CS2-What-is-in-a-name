@@ -155,20 +155,26 @@ def split(text: str, split: str = " ") -> list[str]:
     """
     words: list[str] = []
     split_locs: list[int] = [0]
-    
+
     # get position of every instance of split char
     for loc, char in enumerate(text):
         if char == split:
             split_locs.append(loc)
-    
+
     # split into sub strings
     for i in range(len(split_locs)):
         if i == len(split_locs) - 1:
-            words.append(text[split_locs[i] + 1 :]) # if last then do location to location to end
+            words.append(
+                text[split_locs[i] + 1 :]
+            )  # if last then do location to location to end
         elif i == 0:
-            words.append(text[split_locs[i] : split_locs[i + 1]]) # if firt then loc to next loc
+            words.append(
+                text[split_locs[i] : split_locs[i + 1]]
+            )  # if firt then loc to next loc
         else:
-            words.append(text[split_locs[i] : split_locs[i + 1]][1:]) # last then loc to next loc excluding last char
+            words.append(
+                text[split_locs[i] : split_locs[i + 1]][1:]
+            )  # last then loc to next loc excluding last char
     return words
 
 
@@ -205,7 +211,9 @@ def mix_up_letters(text: str) -> str:
 
     out_str = ""
     while len(text) > 0:
-        index = randint(0, len(text) - 1) # random index in text
-        out_str += text[index] # add text at index to out_str
-        text = text[0:index] + text[index + 1 :] #  remove char at index from text so not chosen again
+        index = randint(0, len(text) - 1)  # random index in text
+        out_str += text[index]  # add text at index to out_str
+        text = (
+            text[0:index] + text[index + 1 :]
+        )  #  remove char at index from text so not chosen again
     return out_str
