@@ -1,3 +1,19 @@
+"""
+What is in a Name
+
+Performs a choice of 13 different functions on someone's name.
+
+Colin Politi
+
+Bonus:
+1. Menu as a fullscreen terminal app with colored text using ansi escape codes.
+2. Interaction with keyboard using msvcrt.
+
+Log:
+
+v1.0 - 9/29/25 - CP
+"""
+
 import msvcrt
 import os
 import sys
