@@ -11,6 +11,7 @@ Bonus:
 
 Log:
 
+v1.1 - 9/30/25 - CP
 v1.0 - 9/29/25 - CP
 """
 
@@ -80,7 +81,7 @@ titles = [
 
 def remove_titles(name: str) -> str:
     names = split_names(name)
-    no_titles = list(filter(lambda char: char not in titles, names))
+    no_titles = list(filter(lambda x: remove_char(remove_char(lower(x), "."), " ") not in titles, names))
     return join(no_titles, " ")
 
 
@@ -175,7 +176,7 @@ def last_name(name: str) -> str:
     Returns:
         str: last sub-string
     """
-    return split_names(name)[-1]
+    return split_names(remove_titles(name))[-1]
 
 
 def middle_names(name: str) -> str | list[str]:
@@ -188,7 +189,8 @@ def middle_names(name: str) -> str | list[str]:
     Returns:
         str | list[str]: str if only one middle sub-string, or list of string if multiple
     """
-    middle_names = split_names(remove_titles(name))[1:-1]
+    no_titles = remove_titles(name)
+    middle_names = split_names(no_titles)[1:-1]
     if len(middle_names) == 1:
         return middle_names[0]
     elif len(middle_names) == 0:
